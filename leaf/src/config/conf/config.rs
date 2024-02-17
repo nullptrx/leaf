@@ -776,6 +776,13 @@ pub fn to_internal(conf: &mut Config) -> Result<internal::Config> {
             inbounds.push(inbound);
         }
 
+        if ext_general.api_interface.is_some() && ext_general.api_port.is_some() {
+            let api_interface = ext_general.api_interface.as_ref().unwrap();
+            let api_port = ext_general.api_port.as_ref().unwrap();
+            let address = format!("{}:{}", api_interface, api_port);
+            std::env::set_var("API_LISTEN", address);
+        }
+
         if ext_general.tun_fd.is_some()
             || ext_general.tun_auto.is_some()
             || ext_general.tun.is_some()
